@@ -41,7 +41,7 @@ grouped = (
     .reset_index(name='Count')
 )
 
-# Pivot to get stacked values
+# pivot to get stacked values
 pivot_df = grouped.pivot_table(
     index=['Assay', 'Result Category'],
     columns='E4 Carrier',
@@ -88,21 +88,21 @@ for i, assay in enumerate(assays):
         bar1 = ax.bar(x, carrier, color="#0b8dea")
         bar2 = ax.bar(x, noncarrier, bottom=carrier, color="#e20cc2")
 
-        # Add percent labels
+        # add percent labels
         if total > 0:
             if carrier > 0:
                 ax.text(x, carrier / 2, f"{carrier/total:.0%}", ha='center', va='center', fontsize=9, color='white')
             if noncarrier > 0:
                 ax.text(x, carrier + noncarrier / 2, f"{noncarrier/total:.0%}", ha='center', va='center', fontsize=9, color='white')
 
-    # Set x-axis
+    # set x-axis
     ax.set_xticks(range(len(available_results)))
     ax.set_xticklabels(available_results)
     ax.set_title(f"{assay}")
     if i == 0:
         ax.set_ylabel("Participant Count")
 
-# Final formatting
+# final plot formatting
 fig.suptitle("pTau-217 Assay Results by APOE ε4 Carrier Status", fontsize=15)
 blue_patch = plt.matplotlib.patches.Patch(color="#0b8dea", label='Carrier')
 pink_patch = plt.matplotlib.patches.Patch(color="#e20cc2", label='Non-Carrier')
@@ -114,17 +114,17 @@ plt.tight_layout(rect=[0, 0, 1, 0.95])  # leave space for title
 
 sheet1_df = pd.read_excel(xls, sheet_name="Sheet1")
 
-# Clean column names: strip whitespace and fix typo
+# clean column names: strip whitespace and fix typo
 sheet1_df.columns = sheet1_df.columns.str.strip()
 sheet1_df.rename(columns={"Diagnostic Certainity": "Diagnostic Certainty"}, inplace=True)
 
 # ensure 'Primary Etiology' column is string
 sheet1_df['Primary Etiology (Per referral)'] = sheet1_df['Primary Etiology (Per referral)'].astype(str)
 
-# Drop missing values
+# drop missing values
 plot_df = sheet1_df.dropna(subset=['Primary Etiology (Per referral)', 'Diagnostic Certainty'])
 
-# Plot
+# plot
 plt.figure(figsize=(10, 6))
 sns.violinplot(
     data=plot_df,
